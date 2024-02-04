@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "rules-paralegal-investigations"
+version = "0.1.0"
+description = "Side project, disconnected from the main system, for looking at the structure and content of rules PDFs."
+authors = ["Sean Wedig <sean.wedig@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+PyMuPDF = "^1.23.21"
+ipykernel = "^6.29.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
