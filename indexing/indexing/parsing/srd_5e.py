@@ -1,5 +1,8 @@
 import fitz
 import re
+from collections import namedtuple
+
+DocChunk = namedtuple('DocChunk', ['chapter', 'section', 'subsection', 'subsubsection', 'starting_page', 'content'])
 
 class SrdParser():
     CHAPTER = { 'font': 'GillSans-SemiBold', 'size': 25.920000076293945, 'color': 9647668 } # ('Races'): 'GillSans-SemiBold', size ~25.920000076293945, color 9647668
@@ -67,19 +70,23 @@ class SrdParser():
                             else:
                                 # end the content of the previous chunk, if there was any
                                 if chunk_content != "":
-                                    previous_chunk = {
-                                        'location': last_heading,
-                                        'content': chunk_content
-                                    }
+                                    previous_chunk = DocChunk(last_heading['chapter'],
+                                                              last_heading['section'],
+                                                              last_heading['subsection'],
+                                                              last_heading['subsubsection'],
+                                                              wayfinding['starting_page'],
+                                                              chunk_content)
                                     doc_chunks.append(previous_chunk)
                                 chunk_content = ""
                                 wayfinding['starting_page'] = page_num
 
         # finish the last chunk
-        previous_chunk = {
-            'location': wayfinding,
-            'content': chunk_content
-        }
+        previous_chunk = DocChunk(wayfinding['chapter'],
+                                  wayfinding['section'],
+                                  wayfinding['subsection'],
+                                  wayfinding['subsubsection'],
+                                  wayfinding['starting_page'],
+                                  chunk_content)
         doc_chunks.append(previous_chunk)
         
         return doc_chunks
