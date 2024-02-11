@@ -1,10 +1,15 @@
+from typing import List
 import fitz
 import re
 from collections import namedtuple
+from langchain_core.documents import Document
+from langchain.document_loaders.base import BaseLoader
 
 DocChunk = namedtuple('DocChunk', ['chapter', 'section', 'subsection', 'subsubsection', 'starting_page', 'content'])
 
-class SrdParser():
+class SrdPdfDocumentLoader(BaseLoader):
+    """A document loader for the 5e SRD PDF (CC version)."""
+
     CHAPTER = { 'font': 'GillSans-SemiBold', 'size': 25.920000076293945, 'color': 9647668 } # ('Races'): 'GillSans-SemiBold', size ~25.920000076293945, color 9647668
     SECTION = { 'font': 'GillSans-SemiBold', 'size': 18, 'color': 9647668 } # ('Dwarf'): 'GillSans-SemiBold', size 18, color 9647668
     SUBSECTION = { 'font': 'GillSans-SemiBold', 'size': 13.920000076293945, 'color': 9647668 } # ('Racial Traits'): 'GillSans-SemiBold', size ~13.920000076293945, color 9647668
@@ -21,7 +26,7 @@ class SrdParser():
         self.doc = fitz.open(pdf_path)
 
 
-    def chunk_srd_pdf(self) -> list[DocChunk]:
+    def load(self) -> List[Document]:
         wayfinding = { 'chapter': 'Legal Information', 'section': None, 'subsection': None, 'subsubsection': None, 'starting_page': None}
         chunk_content = ""
         doc_chunks = []
@@ -89,7 +94,8 @@ class SrdParser():
                                   chunk_content)
         doc_chunks.append(previous_chunk)
         
-        return doc_chunks
+        docs = [self.__to_document(chunk) for chunk in doc_chunks]
+        return docs
 
 
     def __strip_boilerplate(self, text: str) -> str:
@@ -118,3 +124,15 @@ class SrdParser():
         if line['font'] == heading_traits['font'] and line['size'] == heading_traits['size'] and line['color'] == heading_traits['color']:
             return True
         return False
+
+
+    def __to_document(self, chunk: DocChunk) -> Document:
+        metadata = {
+            "chapter": chunk.chapter if chunk.chapter is not None else '',
+            "section": chunk.section if chunk.section is not None else '',
+            "subsection": chunk.subsection if chunk.subsection is not None else '',
+            "subsubsection": chunk.subsubsection if chunk.subsubsection is not None else '',
+            "starting_page": chunk.starting_page if chunk.starting_page is not None else -1
+        }
+
+        return Document(page_content=chunk.content, metadata=metadata)

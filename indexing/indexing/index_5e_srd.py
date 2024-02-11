@@ -1,8 +1,7 @@
 import argparse
-from parsing.srd_5e import SrdParser
+from parsing.srd_5e import SrdPdfDocumentLoader
 from langchain_openai import OpenAIEmbeddings
 from langchain_community.vectorstores import Chroma
-from langchain_core.documents import Document
 
 import dotenv
 
@@ -10,23 +9,11 @@ import dotenv
 def main(srd_pdf, output, env):
     dotenv.load_dotenv(env)
 
-    parser = SrdParser(srd_pdf)
-    chunks = parser.chunk_srd_pdf()
-
-    docs = [Document(page_content=chunk.content, metadata=chunk_metadata(chunk)) for chunk in chunks]
+    parser = SrdPdfDocumentLoader(srd_pdf)
+    docs = parser.load()
 
     vectorstore = Chroma.from_documents(documents=docs, embedding=OpenAIEmbeddings(), persist_directory=output)
     vectorstore.persist()
-
-def chunk_metadata(chunk):
-    return {
-        "chapter": chunk.chapter if chunk.chapter is not None else '',
-        "section": chunk.section if chunk.section is not None else '',
-        "subsection": chunk.subsection if chunk.subsection is not None else '',
-        "subsubsection": chunk.subsubsection if chunk.subsubsection is not None else '',
-        "starting_page": chunk.starting_page if chunk.starting_page is not None else -1
-    }
-
 
 
 if __name__ == '__main__':
