@@ -21,7 +21,7 @@ class SrdParser():
         self.doc = fitz.open(pdf_path)
 
 
-    def chunk_srd_pdf(self):
+    def chunk_srd_pdf(self) -> list[DocChunk]:
         wayfinding = { 'chapter': 'Legal Information', 'section': None, 'subsection': None, 'subsubsection': None, 'starting_page': None}
         chunk_content = ""
         doc_chunks = []
