@@ -2,18 +2,23 @@ import argparse
 from parsing.srd_5e import SrdPdfDocumentLoader
 from langchain_openai import OpenAIEmbeddings
 from langchain_community.vectorstores import Chroma
-
 import dotenv
 
 
 def main(srd_pdf, output, env):
     dotenv.load_dotenv(env)
 
+    print(f'Loading 5e SRD from {srd_pdf}...')
     parser = SrdPdfDocumentLoader(srd_pdf)
     docs = parser.load()
 
+    print(f'Generating embeddings for {len(docs)} sections...')
     vectorstore = Chroma.from_documents(documents=docs, embedding=OpenAIEmbeddings(), persist_directory=output)
+
+    print(f'Persisting vector store to {output}...')
     vectorstore.persist()
+
+    print('Done!')
 
 
 if __name__ == '__main__':
