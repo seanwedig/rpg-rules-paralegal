@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "indexing"
+version = "0.1.0"
+description = "Side project, disconnected from the main system, for indexing the rules PDFs."
+authors = ["Sean Wedig <sean.wedig@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pymupdf = "^1.23.21"
+python-dotenv = "^1.0.1"
+langchain = "^0.1.6"
+langchain-community = "^0.0.19"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
