@@ -1,8 +1,8 @@
 [tool.poetry]
 name = "indexing"
 version = "0.1.0"
-description = ""
-authors = ["sean.wedig@gmail.com <sean.wedig@gmail.com>"]
+description = "Side project, disconnected from the main system, for indexing the rules PDFs."
+authors = ["Sean Wedig <sean.wedig@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
