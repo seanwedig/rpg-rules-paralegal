@@ -1,8 +1,8 @@
 [tool.poetry]
-name = "chatbot"
+name = "rules-paralegal"
 version = "0.1.0"
 description = ""
-authors = ["sean.wedig@gmail.com <sean.wedig@gmail.com>"]
+authors = ["Sean Wedig <sean.wedig@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
