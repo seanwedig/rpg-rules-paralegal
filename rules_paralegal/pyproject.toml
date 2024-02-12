@@ -1,14 +1,12 @@
 [tool.poetry]
-name = "rules-paralegal"
+name = "chatbot"
 version = "0.1.0"
 description = ""
-authors = ["Sean Wedig <sean.wedig@gmail.com>"]
+authors = ["sean.wedig@gmail.com <sean.wedig@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.10"
-langchain = "^0.1.1"
-langchain-community = "^0.0.13"
 
 
 [build-system]
